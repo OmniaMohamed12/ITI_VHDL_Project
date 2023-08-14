@@ -3,19 +3,19 @@ USE ieee.std_logic_1164.ALL;
 use IEEE.numeric_std.all;
 USE ieee.std_logic_signed.ALL;
 
-ENTITY multiplier_divider_comb IS
+ENTITY multiplier_comb IS
 
-	GENERIC (N : INTEGER := 4);
+	GENERIC (N : INTEGER :=4);
 	
-	PORT(a : IN signed(N - 1 DOWNTO 0);
+	PORT(MODE: IN bit;
+	a : IN signed(N - 1 DOWNTO 0);
 	     b : IN signed(N - 1 DOWNTO 0);
-		 control : IN std_logic;
 	     m : OUT signed(N- 1 DOWNTO 0);
 		 r : OUT signed(N- 1 DOWNTO 0);
-		 busy,valid,error:out std_logic );
-END multiplier_divider_comb;
+		 busy,valid,error:out bit );
+END multiplier_comb;
 
-ARCHITECTURE comb_multiplier OF multiplier_divider_comb IS
+ARCHITECTURE comb OF multiplier_comb IS
 
 BEGIN
 	
@@ -26,9 +26,8 @@ BEGIN
 		VARIABLE res : signed(2*N  DOWNTO 0):= (OTHERS => '0');
 	
 	begin
-		if control='1' then
-		    
-		   --Initialize all variables to zero.
+		if MODE='1' then
+                   --Initialize all variables to zero.
 		    a_var:=(OTHERS => '0');
 		    sub_a:=(OTHERS => '0');
 		    res:=(OTHERS => '0');
@@ -62,4 +61,4 @@ BEGIN
 		end if;
 	END PROCESS;
 	
-END comb_multiplier;
+END comb;
