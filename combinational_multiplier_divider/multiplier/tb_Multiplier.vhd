@@ -6,35 +6,35 @@ use IEEE.std_logic_signed.all;
 USE std.textio.ALL;
 
 
-entity tb_Multiplier_Divider is 
-end entity tb_Multiplier_Divider;
+entity tb_Multiplier is 
+end entity tb_Multiplier;
 
-architecture test of tb_Multiplier_Divider is
+architecture test of tb_Multiplier is
 
-component multiplier_divider_comb is 
+component multiplier_comb is 
 generic(N   : integer:=4);
-    port(a, b: in signed(N-1 downto 0);
-         control: in std_logic;
+    port(mode: in bit;
+       a, b: in signed(N-1 downto 0);
          m, r: out signed(N-1 downto 0);
-          busy, valid,error: out std_logic);
-end component multiplier_divider_comb;
+          busy, valid,error: out bit);
+end component multiplier_comb;
 signal N : integer := 4;
-for dut: multiplier_divider_comb  USE ENTITY work.multiplier_divider_comb (comb_multiplier);
+for dut: multiplier_comb  USE ENTITY work.multiplier_comb (comb);
 signal a_tb,b_tb:signed(N-1 downto 0);
-signal control_tb:std_logic;
+signal control_tb:bit;
 signal m_tb,r_tb:signed(N-1 downto 0);
-signal error_tb,valid_tb,busy_tb:std_logic;
+signal error_tb,valid_tb,busy_tb:bit;
 
 begin
   
-  DUT:multiplier_divider_comb generic map ( N=>4) port map(a_tb,b_tb,control_tb,m_tb,r_tb,busy_tb,valid_tb,error_tb);
+  DUT:multiplier_comb generic map ( N=>4) port map(control_tb,a_tb,b_tb,m_tb,r_tb,busy_tb,valid_tb,error_tb);
   p1:process 
     FILE test_file: text OPEN READ_MODE IS "multiplier_comb_test_input.txt";
 	FILE results_file: text OPEN WRITE_MODE IS "multiplier_comb_test_results.txt";
     VARIABLE input_line: line; 
     VARIABLE results_line: line;	
     VARIABLE a_var,b_var: signed(N-1 downto 0);
-    VARIABLE control_var,error_var,valid_var,busy_var:std_logic;
+    VARIABLE control_var,error_var,valid_var,busy_var:bit;
 	VARIABLE r_var,m_var: signed(N-1 downto 0);
     VARIABLE c: character;
     VARIABLE pause: time;  
