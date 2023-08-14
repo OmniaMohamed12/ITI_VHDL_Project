@@ -6,12 +6,13 @@ USE ieee.std_logic_signed.ALL;
 ENTITY multiplier_divider_comb IS
 
 	GENERIC (N : INTEGER := 4);
+	
 	PORT(a : IN signed(N - 1 DOWNTO 0);
 	     b : IN signed(N - 1 DOWNTO 0);
-		   control : IN bit;
+		 control : IN std_logic;
 	     m : OUT signed(N- 1 DOWNTO 0);
-		   r : OUT signed(N- 1 DOWNTO 0);
-		   busy,valid,error:out bit );
+		 r : OUT signed(N- 1 DOWNTO 0);
+		 busy,valid,error:out std_logic );
 END multiplier_divider_comb;
 
 ARCHITECTURE comb_multiplier OF multiplier_divider_comb IS
@@ -26,13 +27,14 @@ BEGIN
 	
 	begin
 		if control='1' then
+		    
 		   --Initialize all variables to zero.
 		    a_var:=(OTHERS => '0');
 		    sub_a:=(OTHERS => '0');
 		    res:=(OTHERS => '0');
 			--a_var holds the value of the multiplicand (a) in the upper N bits.
 			a_var(2*N DOWNTO N+1 ) := a;  
-             --sub_a holds the value of the two's complement of the multiplicand (a) in the upper N bits.			
+            --sub_a holds the value of the two's complement of the multiplicand (a) in the upper N bits.			
 			sub_a(2*N DOWNTO N+1 ) := ((NOT a) + 1);
 			--res holds the value of the multiplier in the lower N bits. 
 			res(N DOWNTO 1) := b;
@@ -54,8 +56,8 @@ BEGIN
 		--r is the least significant N-bits of the result of multiplication.
 		r <= res(N DOWNTO 1);
 		busy <= '0';
-               valid <= '1';
-               error <= '0';
+        valid <= '1';
+        error <= '0';
 		
 		end if;
 	END PROCESS;
